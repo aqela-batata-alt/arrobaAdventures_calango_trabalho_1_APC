@@ -1,0 +1,438 @@
+algoritmo ArrobaAdventures;
+// Síntese
+//  Objetivo: Desenvolver um rpg no calango com o intuito de testar as habilidades da linguagem
+//  Entrada : W, A, S, D, K e P, será dito os usos no decorrer do jogo :)
+//  Saída   : A tela do jogo
+principal
+	// Declarações
+	// Instruções
+	telaInicial();
+fimPrincipal
+//-----------------------------------------------------------------------------------------------------
+//										   ____________
+//										  | apreciando |
+//							 	 _______  |___  _______|
+//								||     |      |/ _
+//								||_____|	  O ||
+//								|\ O ..\    __[\||
+//								|\| [],,|./| ||'||
+//						''''''''''''''''''''''''''''''''
+//-----------------------------------------------------------------------------------------------------
+//                                      menu inicial :)
+//-----------------------------------------------------------------------------------------------------
+procedimento telaInicial()
+	caracter tela[1024];
+	caracter keyPres;
+	texto screen[3];
+	inteiro loop, lock,prosseguir,creditos,check;
+	inteiro ponto_init, ponto1, ponto2, aux, otimizador_menu, area_menu, interagir,aux1,aux2;
+	real auxR;
+	otimizador_menu = 1;
+	ponto_init = 1;
+	area_menu = 0;
+	creditos = 1;
+	lock = 0;
+	check = 0;
+	prosseguir = 0;
+	loop = 0;
+	screen[0] = "V.1.2.1 B.I.O.S.                             trabalho Calango :3                        ______________________                                         |\  __________________ \                    ARROBA ADVENTURES:  \ \ \  ______________ \ \                     O BOLO SECRETO     \ \ \ \  __íí__   @ \ \ \                                        \ \ \ \ \=====\   1 \ \ \                    ____ÍÍÍ____         \ \ \ \_____________\ \ \                  |___________|         \ \ \_________________\ \                _|___________|_         | \     ___   O         \              / |___________| \        \  \  __\  \___      (B) \             \_______________/         \  \ \___   __\  (A)     \                                       \  \    \__\             \            >   Início   <             \  \               ...   \              Créditos                 \  \_____________________\               Sair                    \_|______________________|                                    Feito por: Víctor Moreira Almeida";
+	screen[1] = "                                                                                       OBRIGADO POR JOGAR :3                                                                                                    ___                               arte: Víctor       /|_,,_/|  //'\\                            código: Víctor      | __ ,,_|  \\  '                            ideias: Víctor      |  @   @|\ ||                         o mais brabo: Víctor  ___/\____w__/_|/_________________________________                  W         W             ..__                  \                                        <''__}~~                \                                                                \                                                                \                                                                \                                 >   Voltar   <                 \                                                                \                                                                \       ";
+	screen[2] = "                                                                  Tutorial:                                                                                            []  =  Avançar                                                  {}  =  Retroceder                  [w]                          [P] =  Finalizar o jogo         [a][s][d]       [k]             '=' =  Você morre                 Andar      Interagir           ¬  =  Chave                                                     H  =  Porta trancada                                                                        Aperte [P] para fechar o jogo.      H  +  ¬ =  ]                                                                                                                    ¬ + '=' =  sem chave                                                                               Há um bolo escondido na caverna, vá atrás dele!                                                                                                                                      ";
+	enquanto(loop == 0)faca // loop do menu
+		se(otimizador_menu == 0)entao // checa a tecla acionada
+			leiaCaracter(keyPres);
+		senao
+			keyPres = 'ç';
+		fimSe
+		se(otimizador_menu == 1)entao // inicializador de menu universal
+			para(aux de 0 ate 1023 passo 1)faca // inicializador do menu
+				tela[aux] = caracterTexto(screen[area_menu],aux);
+				se(tela[aux] == '>')entao // posiçao inicial da escolha
+					se(ponto_init == 1)entao
+						ponto1 = aux;
+						ponto2 = ponto1 - 64;
+						ponto_init = 0;
+					fimSe
+				fimSe
+			fimPara
+		fimSe
+		otimizador_menu = 0;
+		//--------------------------------//-------------------------------------
+		//  menu :P
+		//--------------------------------//-------------------------------------
+		interagir = 0;
+		escolha(keyPres) // descobre a tecla apertada
+		caso 'w'
+			ponto2 = ponto1;
+			ponto1 = ponto1 - 64;
+			lock = lock - 1;
+			check = 1;
+			interrompa;
+		caso 's'
+			ponto2 = ponto1;
+			ponto1 = ponto1 + 64;
+			lock = lock + 1;
+			check = 1;
+			interrompa;
+		caso 'k'
+			interagir = 1;
+			check = 1;
+			interrompa;
+		outroCaso
+		fimEscolha
+		se(ponto1 >= 0 e ponto1 <= 1023 e creditos != 0)entao // move o seletor do menu
+			escolha(lock)
+			caso -1
+				lock = 0;
+				ponto1 = ponto1 + 64;
+				interrompa;
+			caso 3
+				lock = 2;
+				ponto1 = ponto1 - 64;
+				interrompa;
+			outroCaso
+				tela[ponto1] = '>';
+				tela[ponto1 + 13] = '<';
+				tela[ponto2] = ' ';
+				tela[ponto2 + 13] = ' ';
+			fimEscolha
+		fimSe
+		se(interagir == 1 e creditos != 0)entao // escolhas do menu
+			escolha(lock)
+			caso 0 // segue o jogo
+				prosseguir = 1;
+				loop = 1;
+				interrompa;
+			caso 1 // vai para os créditos
+				creditos = 0;
+				area_menu = 1;
+				otimizador_menu = 1;
+				ponto_init = 1;
+				interagir = 0;
+				interrompa;
+			caso 2 //fecha o programa
+				loop = 1;
+				prosseguir = 0;
+				interrompa;
+			outroCaso
+			fimEscolha
+		fimSe
+		se(interagir == 1 e creditos == 0)entao // área dos créditos
+			creditos = 1;
+			area_menu = 0;
+			otimizador_menu = 1;
+			ponto_init = 1;
+			lock = 0;
+		fimSe
+		// atualiza a tela :)
+		limpaTela();
+		para(aux de 0 ate 1023 passo 1)faca
+			aux2 = aux + 1;
+			aux1 = aux2/64;
+			auxR = aux2/64;
+			se(aux == 1023 ou aux == 0)entao
+				aux2 = aux;
+			fimSe
+			se(aux != 0 e aux1 == auxR)entao
+				escreval(tela[aux]);
+			senao
+				escreva(tela[aux]);
+			fimSe
+		fimPara
+		escreva("  Use W e S para selecionar e use K para interagir :) ");
+	fimEnquanto
+	se(prosseguir == 1)entao
+		para(aux de 0 ate 1023 passo 1)faca // inicializador do Tutorial ;-;)b
+				tela[aux] = caracterTexto(screen[2],aux);
+				se(tela[aux] == '>')entao
+					se(ponto_init == 1)entao
+						ponto1 = aux;
+						ponto2 = ponto1 - 64;
+						ponto_init = 0;
+					fimSe
+				fimSe
+		fimPara
+		limpaTela();
+		para(aux de 0 ate 1023 passo 1)faca
+			aux2 = aux + 1;
+			aux1 = aux2/64;
+			auxR = aux2/64;
+			se(aux == 1023 ou aux == 0)entao
+				aux2 = aux;
+			fimSe
+			se(aux != 0 e aux1 == auxR)entao
+				escreval(tela[aux]);
+			senao
+				escreva(tela[aux]);
+			fimSe
+		fimPara
+		leiaCaracter(keyPres);
+		mapaPlayer();
+	fimSe
+fimProcedimento
+//-----------------------------------------------------------------------------------------------------
+//
+//									   __ÍÍÍÍÍ__
+//								 ,-'''          '''-,
+//								|====================|
+//							  __|====================|__
+//							/   |____________________|  \
+//							\___________________________/
+//							  Achou o boli hihihihihihi :3
+//
+//-----------------------------------------------------------------------------------------------------
+//                      O processo do jogo:
+//-----------------------------------------------------------------------------------------------------
+procedimento mapaPlayer()
+	inteiro aux,loop,aux1,aux2,aux3,auxS,scene,otimizador_cena,smooth;
+	real auxR;
+	caracter mapa[1024];
+	texto cena[16],dialogo[16];
+	inteiro playerXY,auxPlayer,interagir,player_init,pos_map;
+	inteiro key,fire,lock_padre;
+	caracter playerM, keyPress, hitboxPlayer,pos_map2;
+	player_init = 0;
+	key = 0;
+	lock_padre = 1;
+	playerXY = 691;
+	otimizador_cena = 1;
+	smooth = 32;
+	scene = 0;
+	loop = 0;
+	//--------------------------------//-------------------------------------
+	// notas iniciais: here goes the long task.... hora de progamar o mapa :P
+	//--------------------------------//-------------------------------------
+	//cenas do mapa:
+	cena[0] = ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,|                                                   /_____()___||   @                                                     88   ||               +           ____________________               ||             __|_          |   $$$     ___     |              ||           __| ^ |         |  $$$     /___\    |              ||          /___[]_| 5       | $$$      |.[]|    |        0     ||                           |______|     88  |__|              ||           7                                                  ||                                                              ||                                        3                     ||                                                              ||     _____  _____     _____       2                           ||    /_____\/_____\   /_____\           ____       _________   ||     |.[]|  |.[]|     |.[]|           /____\     /_________|  |''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''";
+	cena[1] = ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,|WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW||WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW||WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW||WWWWWWW|\______________________________________________/|WWWWW||WWWWWWW||       /,,,,,                                 ||WWWWW||WWWWWWW||   |   |     \     |  |  |  |  | 6|  |  |  |  ||WWWWW||WWWWWWW|| --+-- |      |    |  |  |  |  |  |  |  |  |  ||WWWWW||WWWWWWW||   |   |  4   |    |  |  | 9|  |  |  |  |  |  ||WWWWW||WWWWWWW||   |   |     /     |  |  |  |  |  |  |  |  |  ||WWWWW||WWWWWWW||       |   ''                                 ||WWWWW||WWWWWWW||       |                                 @    ||WWWWW||WWWWWWW''''''''''''''''''''''''''''''''''''''''{}{}''''''WWWWW||WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW||WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW|''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''";
+	cena[2] = ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,|[0]    ________________                  _____________     [0]||[0]   /                \                /             \    [0]||[0]   | Pegue a chave! |                |   Valeu!!1  |    [0]||[0]   \__  ____________/                \_________  __/    [0]||[0]      |/              __                       \|       [0]||[0]                     |  \_                              [0]||[0]                      \   |                             [0]||[0]                       \   |                            [0]||[0]                        \  \___                         [0]||[0]                         |     \                        [0]||[0]                         |      \                       [0]||[0]                         \    O  |                      [0]||[0]                          \_____/                       [@]||[0]                                                        [0]|''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''";
+	cena[3] = ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,|WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW||WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW||WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW||WWWWWWW|\______________________________________________/|WWWWW||WWWWWWW||       /,,,,,                                 ||WWWWW||WWWWWWW||   |   |     \     |  |  |  |  | 6|  |  |  |  ||WWWWW||WWWWWWW|| --+-- |      |    |  |  |  |  |  |  |  |  |  ||WWWWW||WWWWWWW||   |   |  4   |    |  |  | 9|  |  |  | @|  |  ||WWWWW||WWWWWWW||   |   |     /     |  |  |  |  |  |  |  |  |  ||WWWWW||WWWWWWW||       |   ''                                 ||WWWWW||WWWWWWW||       |                                      ||WWWWW||WWWWWWW''''''''''''''''''''''''''''''''''''''''[][]''''''WWWWW||WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW||WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW|''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''";
+	cena[4] = ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,|                                                   /______H___||                                                              ||               +           ____________________               ||             __|_          |   $$$     ___     |              ||           __| ^ |         |  $$$     /___\    |              ||          /___{}_| 5       | $$$      |.[]|    |        0     ||              @            |______|    8888 |__|              ||           7                                                  ||                                                              ||                                        3                     ||                                                              ||     _____  _____     _____       2                           ||    /_____\/_____\   /_____\           ____       _________   ||     |.[]|  |.[]|     |.[]|           /____\     /_________|  |''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''";
+	cena[5] = ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,|WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW||WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW||WWWWWWWWWWW/                                   \WWWWWWWWWWWWWW||WWWWWWWWWWW|                                       \WWWWWWWWWW||WWWWWWWWWWW|                                         |WWWWWWWW||WWWWWWWWWWW|                    1                    X       ]||WWWWWWWWWW/                                          X       ]||[                                                   _|WWWWWWWW||[                                               ___/WWWWWWWWWW||WWWWWWWWWW\                                    /WWWWWWWWWWWWWW||WWWWWWWWWWW|                                  /WWWWWWWWWWWWWWW||WWWWWWWWWWW|                      @          |WWWWWWWWWWWWWWWW||WWWWWWWWWWWWWWWWWW\,,,,,,,,,,,,,,xx,,,,,,,,,/WWWWWWWWWWWWWWWWW||WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW|''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''";
+	cena[6] = ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,|WWWWWWWWWWWWWWWWWWWWWWWWWWWW|[][]\WWWWWWWWWWWWWWWWWWWWWWWWWWWW||WWWWWWWWWWWWWWWWWWWWWWWWWWW/      \WWWWWWWWWWWWWWWWWWWWWWWWWWW||WWWWWWWWWWW/  x                       WWWWWWWWWWWWWWWWWWWWWWWW||WWWWWWWWWWW|x                                       WWWWWWWWWW||WWWWWWWWWWW|                                          WWWWWWWW||WWWWWWWWWWW|                         ,,_/|_,,_/|.         WWWW||WWWWWWWWWW/                      ,====/__    __| .         WWW||[        x                  ====/  , | (|    (|| .           }||[         x                /        ,\     W   / ,          @}||WWWWWWWWWW-==============='  ,       ''''''''''   ,      WWWWW||WWWWWWWWWW,     ~        __      ,     W W    ,,,,WWWWWWWWWWWW||WWWWWWWWWWW,,,,,,,      /| \ ~            ~  |WWWWWWWWWWWWWWWW||WWWWWWWWWWWWWWWWWW\,,,,,,,,,,,,,,,,,,,,,,,,,/WWWWWWWWWWWWWWWWW||WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW|''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''";
+	cena[7] = ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,|WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW||WWWWWW=                                   WWWWWWWWWWWWWWWWWWWW||[  W==  ================================= ===========WWWWWWWWW||WW WWW W                                W                WWWWW||WW WWW W================= ======================== =====WWWWWW||WW W   W                                                WWWWWW||W= = ==== =============================================WWWWWWW||WW   WWWW                                               WWWWWW||W=======WWW========================================== ==WWWWWW||WWWWWWWWW                                               WWWWWW||WWWWWWW=================   ==============================WWWWW||WWWWWWW                                                  WWWWW||WWWWWWWWWWWWWWWWWWWWWWWWWWWWW @  WWWWWWWWWWWWWWWWWWWWWWWWWWWWW||WWWWWWWWWWWWWWWWWWWWWWWWWWWWW{}{}WWWWWWWWWWWWWWWWWWWWWWWWWWWWW|''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''";
+	cena[8] = ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,|WWWWWWWWWWWWWWWWWWWWWWWWWWWxxxxxxxxWWWWWWWWWWWWWWWWWWWWWWWWWWW||WW=======WWWWWWWWWWW                      WWWWWWWWWWWWWWWWWWWW||W  ====                        .                            @x|| ¬ |WWWW                                W          ¬     WWWWW||WWWWWWWW              .                                 WWWWWW||WWWWW                                                   WWWWWW||WWWWWW ============================================= ==WWWWWWW||WWWWWWWW                                               WWWWWWW||WWWWWWWWWWW                    ¬              .         WWWWWW||WWWWWWWWW                                               WWWWWW||WWWWWWW=================   ==============================WWWWW||WWWWWWW                                                  WWWWW||WWWWWWWWWWWWWWWWWWWWWWWWWWWWW    WWWWWWWWWWWWWWWWWWWWWWWWWWWWW||WWWWWWWWWWWWWWWWWWWWWWWWWWWWW[][]WWWWWWWWWWWWWWWWWWWWWWWWWWWWW|''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''";
+	cena[9] = ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,|WWWWWWWWWWWWWWWWWWWWWWWWWWWW|xxxx\WWWWWWWWWWWWWWWWWWWWWWWWWWWW||WWWWWWWWWWWWWWWWWWWWWWWWWWW/ xx @ \WWWWWWWWWWWWWWWWWWWWWWWWWWW||WWWWWWWWWWW/  x                       WWWWWWWWWWWWWWWWWWWWWWWW||WWWWWWWWWWW|x                                       WWWWWWWWWW||WWWWWWWWWWW|                                          WWWWWWWW||WWWWWWWWWWW|                                              WWWW||WWWWWWWWWW/                                                WWW||  x                                                        x H|| *                                                          x]||WWWWWWWWWW-===============                               WWWWW||WWWWWWWWWW,  ¬ $$$$$$$$$ =                    ,,,,WWWWWWWWWWWW||WWWWWWWWWWW,,,,,,, $$$   =                   |WWWWWWWWWWWWWWWW||WWWWWWWWWWWWWWWWWW\,,,,,,,,,,,,,,,,,,,,,,,,,/WWWWWWWWWWWWWWWWW||WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW|''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''";
+	cena[10] = ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,|WWWWWWWWWWWWWWWWWWWWWWWWWWWW|xxxx\WWWWWWWWWWWWWWWWWWWWWWWWWWWW||WWWWWWWWWWWWWWWWWWWWWWWWWWW/ xx   \WWWWWWWWWWWWWWWWWWWWWWWWWWW||WWWWWWWWWWW/  x                       WWWWWWWWWWWWWWWWWWWWWWWW||WWWWWWWWWWW|x                                       WWWWWWWWWW||WWWWWWWWWWW|                                          WWWWWWWW||WWWWWWWWWWW|                                              WWWW||WWWWWWWWWW/                                                WWW||  x                                                       x  H|| *@                                                         x]||WWWWWWWWWW-===============                               WWWWW||WWWWWWWWWW, ¬   $$$$$$$$ =                    ,,,,WWWWWWWWWWWW||WWWWWWWWWWW,,,,,,,   $ ¬ =                   |WWWWWWWWWWWWWWWW||WWWWWWWWWWWWWWWWWW\,,,,,,,,,,,,,,,,,,,,,,,,,/WWWWWWWWWWWWWWWWW||WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW|''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''";
+	cena[11] = ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,|WWWWWWWWWWWWWWWWWWWWWWWWWWWW|[][]\WWWWWWWWWWWWWWWWWWWWWWWWWWWW||WWWWWWWWWWWWWWWWWWWWWWWWWWW/ xxxxx\WWWWWWWWWWWWWWWWWWWWWWWWWWW||WWWWWWWWWWW/  x        xxxxxxx        WWWWWWWWWWWWWWWWWWWWWWWW||WWWWWWWWWWW|x                    xxx                WWWWWWWWWW||WWWWWWWWWWW|                                          WWWWWWWW||WWWWWWWWWWW|                         ,,_/|_,,_/|.         WWWW||WWWWWWWWWW/         x            ,====/__    __| .         WWW||x@       x                  ====/  , | (|    (|| .           ]||xx         x               /        ,\     W   / ,           ]||WWWWWWWWWW-==============='  ,       ''''''''''   ,      WWWWW||WWWWWWWWWW,     ~        __      ,     W W    ,,,,WWWWWWWWWWWW||WWWWWWWWWWW,,,,,,,      /| \ ~            ~  |WWWWWWWWWWWWWWWW||WWWWWWWWWWWWWWWWWW\,,,,,,,,,,,,,,,,,,,,,,,,,/WWWWWWWWWWWWWWWWW||WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW|''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''";
+	cena[12] = ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,|WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW||WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW||WWWWWWWWWWW/                                   \WWWWWWWWWWWWWW||WWWWWWWWWWW|                                       \WWWWWWWWWW||WWWWWWWWWWW|                                         |WWWWWWWW||WWWWWWWWWWW|                    1                            H||WWWWWWWWWW/                                                  H||x @                                                 _|WWWWWWWW||[x                                              ___/WWWWWWWWWW||WWWWWWWWWW\                                    /WWWWWWWWWWWWWW||WWWWWWWWWWW|                                  /WWWWWWWWWWWWWWW||WWWWWWWWWWW|                                 |WWWWWWWWWWWWWWWW||WWWWWWWWWWWWWWWWWW\,,,,,,,,,,,,,,xx,,,,,,,,,/WWWWWWWWWWWWWWWWW||WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW|''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''";
+	cena[13] = ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,|WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW||WWWWWWWWWWWWWWWWWWWWWWWWWW         x              x    WWWWWWW||WWWWWWWWWWWWWWWWWW                                       WWWWW||WWWWWWWWWWWWWWWWW       x                                 WWWW||WWWWWWWWWWWWW                          x                   WWW||WWWWWWWWWWW      1                ______             x      WW||WWWWWWWWWW   x                    |bolo]                    WW||[x@                               ''''''                     W||[ x                                  x                       W||WWWWWWWWWWWWW            x                        x        WWW||WWWWWWWWWWWWW   x                       x               WWWWWW||WWWWWWWWWWWWWWW               x                    WWWWWWWWWWW||WWWWWWWWWWWWWWWWWWWW                    WWWWWWWWWWWWWWWWWWWWWW||WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW|''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''";
+	cena[14] = ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,|WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW||WWWWWWWWWWWWWWW                                         WWWWWW||WWWWWW                                                      WW||WWW                      Obrigado por                       WW||WW                         jogar :3                         WW||WW                                                          WW||[x@                                                         [W||[ x                          ÍÍÍ                            [W||WW                    _..-'''   '''-.._                     [W||WW                   |=================|                    [W||WW                  /|_________________|\                   WW||WWW                 \___________________/                   WW||WWWWW                                   fase de geração au- WW||WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW tomática acima :)  WWW|''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''";
+	dialogo[0] = "ZERO-CHAN: Arroba Nii, tem bolo escondido, vai ver lá o padre!";
+	dialogo[1] = "PADRE QUATRO: Arroba, venha aqui!";
+	dialogo[2] = " * USE A CHAVE COM O BOTÃO 'k' :3 USE 'P' EM CASO DE SOFTLOCK * ";
+	dialogo[3] = "PADRE QUATRO: Amém!";
+	dialogo[4] = "ZERO-CHAN: mano, o um(1) foi na frente :P encontre-o";
+	dialogo[5] = "UM: Tá tudo caindo, rápido aperte o botão na outra sala";
+	dialogo[6] = "GATO SECRETO: se tocar no igual(=), pega no meu... UwU";
+	dialogo[7] = "ARROBA: Não posso tocar no igual!";
+	dialogo[8] = " * PEGUE AS CHAVES(¬) * ";
+	dialogo[9] = "ARROBA: O botão(*), noice!";
+	dialogo[10] = "ARROBA: Hora de comer boli :P";
+	dialogo[11] = "GATO SECRETO: Vai na fé que o boli é seu hihihi";
+	dialogo[12] = "UM: boa, já posso soltar o botão que estou apertando!";
+	dialogo[13] = "UM: esse boli é falso, entre na sala secreta!";
+	dialogo[14] = "Víctor: Obrigado por jogar hehe UwU)b";
+	dialogo[15] = "never gonna give you up, never gonna let you down";
+	enquanto( loop == 0)faca	// loop do jogo em si B)
+		se(otimizador_cena == 0)entao // checa se é pra chamar a função de apertar a tecla
+			leiaCaracter(keyPress);
+		senao
+			keyPress = 'ç';
+		fimSe
+		//--------------------------------//-------------------------------------
+		// buffer do mapa
+		//--------------------------------//-------------------------------------
+		se(scene == 15 e otimizador_cena == 1)entao // mapa de teste :) * continua na beta *
+			para(aux  de 0 ate 1023 passo 1)faca
+				aux3 = 0;
+				aux1 = aux % 64;
+				aux2 = aux - 1;
+				aux2 = aux2 % 64;
+				se(aux1 == 0 e aux > 63)entao //parede lateral direita
+					mapa[aux] = '|';
+					aux3 = 1;
+				fimSe
+				se(aux2 == 0 e aux > 63)entao //parede lateral esquerda
+					mapa[aux] = '|';
+					aux3 = 1;
+				fimSe
+				se(aux <= 63 e aux >= 0)entao // paredes superiores
+					mapa[aux] = ',';
+					aux3 = 1;
+				fimSe
+				se(aux >= 961 e aux <= 1023)entao // paredes inferiores
+					mapa[aux] = ''';
+					aux3 = 1;
+				fimSe
+				se(aux3 != 1)entao  // sem paredes
+					mapa[aux] = ' ';
+				fimSe
+			fimPara
+		fimSe
+		se(scene != 15 e otimizador_cena == 1)entao // inicializador de mapa universal
+			para(aux de 0 ate 1023 passo 1)faca // inicializador da cena
+				mapa[aux] = caracterTexto(cena[scene],aux);
+				se(mapa[aux] == '@')entao // posiçao inicial do player
+					se(player_init == 0)entao
+						playerXY = aux;
+						player_init = 1;
+					fimSe
+					mapa[aux] = ' ';
+				fimSe
+			fimPara
+		fimSe
+		otimizador_cena = 0;
+		//--------------------------------//-------------------------------------
+		//  player parte 01
+		//--------------------------------//-------------------------------------
+		auxPlayer = 0;
+		interagir = 0;
+		escolha(keyPress) // descobre a tecla apertada
+		caso 'w'
+			auxPlayer = auxPlayer - 64;
+			interrompa;
+		caso 'a'
+			auxPlayer = auxPlayer - 1;
+			interrompa;
+		caso 's'
+			auxPlayer = auxPlayer + 64;
+			interrompa;
+		caso 'd'
+			auxPlayer = auxPlayer + 1;
+			interrompa;
+		caso 'k'
+			interagir = 1;
+			interrompa;
+		caso 'p'
+			loop = 1;
+			interrompa;
+		outroCaso
+			//auxPlayer = playerXY;
+		fimEscolha
+		se(playerXY >= 0 e playerXY <= 1023)entao
+			hitboxPlayer = mapa[playerXY + auxPlayer]; // pega a posição futura pra checar
+			escolha(hitboxPlayer)
+			caso ' '// checa se está livre pra andar
+				mapa[playerXY] = ' ';
+				playerXY = playerXY + auxPlayer;
+				mapa[playerXY] = '@'; //coloca o protagonista no buffer de vídeo
+				interrompa;
+			caso '['// checa se está na porta para avançar cena
+				otimizador_cena = 1;
+				scene = scene + 1;
+				player_init = 0;
+				limpaTela();
+				smooth = 0;
+				interrompa;
+			caso ']'
+				otimizador_cena = 1;
+				scene = scene + 1;
+				player_init = 0;
+				limpaTela();
+				smooth = 0;
+				interrompa;
+			caso '{'// checa se está na porta para voltar a cena
+				otimizador_cena = 1;
+				scene = scene - 1;
+				player_init = 0;
+				limpaTela();
+				smooth = 0;
+				interrompa;
+			caso '}'
+				otimizador_cena = 1;
+				scene = scene - 1;
+				player_init = 0;
+				limpaTela();
+				interrompa;
+			caso '='// "mata" o player
+				otimizador_cena = 1;
+				player_init = 0;
+				key = 0;
+				limpaTela();
+				smooth = 0;
+				interrompa;
+			caso '¬' // pega a chave
+				key = key + 1;
+				mapa[playerXY] = ' ';
+				playerXY = playerXY + auxPlayer;
+				mapa[playerXY] = '@';
+				interrompa;
+			caso '4' // pega a chave com o padre
+				se(lock_padre == 1)entao
+					key = key + 1;
+					lock_padre = 0;
+					otimizador_cena = 1;
+					scene = scene + 1;
+					player_init = 0;
+					limpaTela();
+					smooth = 0;
+				fimSe
+				interrompa;
+			caso '*' // checa se apertou o botão
+				se(scene == 9)entao
+					otimizador_cena = 1;
+					scene = scene + 1;
+					player_init = 0;
+					limpaTela();
+					smooth = 0;
+				fimSe
+				interrompa;
+			outroCaso
+			fimEscolha
+		fimSe
+		//------------------ Player parte 2 ------------------------
+		se(interagir == 1)entao
+			hitboxPlayer = mapa[playerXY - 64]; // checa em cima
+			se(key >= 1 e hitboxPlayer == 'H')entao
+				mapa[playerXY-64] = '[';
+				key = key - 1;
+			fimSe
+			hitboxPlayer = mapa[playerXY - 1]; // checa na esquerda
+			se(key >= 1 e hitboxPlayer == 'H')entao
+				mapa[playerXY-1] = '[';
+				key = key - 1;
+			fimSe
+			hitboxPlayer = mapa[playerXY + 64]; // checa em baixo
+			se(key >= 1 e hitboxPlayer == 'H')entao
+				mapa[playerXY+64] = ']';
+				key = key - 1;
+			fimSe
+			hitboxPlayer = mapa[playerXY + 1]; // checa na direita
+			se(key >= 1 e hitboxPlayer == 'H')entao
+				mapa[playerXY+1] = ']';
+				key = key - 1;
+			fimSe
+		fimSe
+		interagir = 0;
+		// teste apenas, apagar :)
+		//--------------------------- NÃO É MAIS TESTE YAAAY \^O^)/  ---------------------------------
+		// 									desenhar a tela :)
+		// para evitar slowdown, descomente para velocidade~ vrum vrum
+		/*
+		se(smooth == 128)entao
+			limpaTela();
+			smooth = 0;
+		fimSe*/
+		para(aux de 0 ate 14 passo 1)faca
+			escreval("");
+		fimPara
+		escreval(dialogo[scene]);
+		para(aux de 0 ate 1023 passo 1)faca
+			aux2 = aux + 1;
+			aux3 = aux%64;
+			aux1 = aux2/64;
+			auxR = aux2/64;
+			se(aux == 1023 ou aux == 0)entao
+				aux2 = aux;
+			fimSe
+			se(aux != 0 e aux1 == auxR)entao
+				escreval(mapa[aux]);
+			senao
+				escreva(mapa[aux]);
+			fimSe
+		fimPara
+		escreva("chaves: ", key, " | Use W, A, S e D para andar e use K para interagir :) ");
+		smooth = smooth + 1;
+	fimEnquanto
+fimProcedimento
